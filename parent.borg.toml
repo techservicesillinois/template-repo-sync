@@ -1,0 +1,13 @@
+[template]
+files = [
+    ".gitattributes",
+    ".github/workflows/deploy.yml",
+    ".gitignore",
+    "CODE_OF_CONDUCT.md",
+    "Makefile",
+    "SECURITY.md",
+    "mypy.ini",
+    "pyproject.toml",
+    "soar_template",
+    "tests/test_python_version.py",
+]
