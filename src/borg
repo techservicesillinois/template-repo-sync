@@ -58,9 +58,13 @@ def compare_repo(args):
     differ = False
 
     for filename, tmpf in TMP_FILES.items():
-        if not filecmp.cmp(filename, tmpf, shallow=False):
+        if not os.path.isfile(filename):
+            print(f"{filename} is missing.", file=sys.stderr)
             differ = True
-            print(f"{filename} differs.", file=sys.stderr)
+        else:
+            if not filecmp.cmp(filename, tmpf, shallow=False):
+                differ = True
+                print(f"{filename} differs.", file=sys.stderr)
 
     if differ:
         sys.exit(1)
