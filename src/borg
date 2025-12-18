@@ -16,6 +16,7 @@ import os
 import shutil
 import sys
 import tempfile
+import tomllib
 
 from os import makedirs
 from os.path import basename, dirname, join, splitext
@@ -38,16 +39,17 @@ TMPDIR = tempfile.TemporaryDirectory(prefix='soar.template')
 #     'SECURITY.md',
 #     'mypy.ini',
 #     'pyproject.toml',
-#     'soar_template',
+#     'borg',
 #     'tests/test_python_version.py',
 # ]
 
 TMP_FILES = {}
 
 
-def github_download(path):
+def github_download(config, path):
     '''Download files from splunk-soar-template repo to tmpdir. '''
-    response = requests.get(urljoin(REPO_URL, path))
+    repo_url = config['template']['repo_url']
+    response = requests.get(urljoin(repo_url, path))
 
     if response.status_code == 200:
         filename = join(TMPDIR.name, path)
@@ -94,7 +96,7 @@ def update_repo(args):
 
 
 def generate(args, files):
-    msg = "# Ignore files managed by soar_template in Github PR reviews\n"
+    msg = "# Ignore files managed by borg in Github PR reviews\n"
     with open(args.FILE, "w") as file:
         if args.FILE == '.gitattributes':
             file.write(msg)
@@ -129,10 +131,10 @@ def init_parser():
     parser.add_argument(
         "-c",
         "--config",
-        default=".borg.yaml",
+        default=".borg.toml",
         metavar="FILE",
-        type=argparse.FileType('r'),
-        help="Open yaml config file")
+        type=argparse.FileType('rb'),
+        help="Open TOML config file")
     parser.add_argument(
             "-m",
             "--make-target",
@@ -140,7 +142,7 @@ def init_parser():
             type=MakeDependencyFile('w'),
             help="Writes a Makefile dependency TARGET.d file: "
                  "TARGET.d will configure the TARGET to depend on "
-                 "the files checked by soar_template compare.")
+                 "the files checked by borg compare.")
     subparsers = parser.add_subparsers()
 
     update = subparsers.add_parser('update', aliases=['up'])
@@ -157,21 +159,22 @@ def init_parser():
     return parser
 
 
+
 def main():
     parser = init_parser()
     args = parser.parse_args()
 
     if '.git' not in os.listdir(os.curdir):
-        print("soar_template must run from repository root.")
+        print("borg must run from repository root.")
         exit(1)
+
+    config = tomllib.load(args.config)
 
     if args.make_target:
         target = splitext(basename(args.make_target.name))[0]
         print(f"{target}: {' '.join(FILES)}", file=args.make_target)
 
-
-
-    for path in FILES:
+    for path in config.get('template')['files']:
         if args.source_dir:
             file_path = os.path.join(args.source_dir, path)
             if not os.path.isfile(file_path):
@@ -180,7 +183,7 @@ def main():
                 exit(1)
             TMP_FILES[path] = file_path
         else:
-            TMP_FILES[path] = github_download(path)
+            TMP_FILES[path] = github_download(config, path)
 
     if hasattr(args, 'func'):
         args.func(args)
