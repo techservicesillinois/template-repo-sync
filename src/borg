@@ -29,26 +29,12 @@ import requests
 # REPO_URL = f'{GITHUB_ORG_URL}/splunk-soar-template/refs/heads/main/'
 TMPDIR = tempfile.TemporaryDirectory(prefix='soar.template')
 
-# These FILES should never differ from the template!
-# FILES = [
-#     '.gitattributes',
-#     '.github/workflows/deploy.yml',
-#     '.gitignore',
-#     'CODE_OF_CONDUCT.md',
-#     'Makefile',
-#     'SECURITY.md',
-#     'mypy.ini',
-#     'pyproject.toml',
-#     'borg',
-#     'tests/test_python_version.py',
-# ]
 
 TMP_FILES = {}
 
 
-def github_download(config, path):
+def github_download(repo_url, path):
     '''Download files from splunk-soar-template repo to tmpdir. '''
-    repo_url = config['template']['repo_url']
     response = requests.get(urljoin(repo_url, path))
 
     if response.status_code == 200:
@@ -169,21 +155,36 @@ def main():
         exit(1)
 
     config = tomllib.load(args.config)
+    remote_config = None
 
     if args.make_target:
         target = splitext(basename(args.make_target.name))[0]
         print(f"{target}: {' '.join(FILES)}", file=args.make_target)
 
-    for path in config.get('template')['files']:
-        if args.source_dir:
+    repo_url = config.get('template').get('repo_url')
+
+    if not config.get('template').get('files'):
+        remote_config_file = github_download(repo_url, '.borg.toml')
+        remote_config = tomllib.load(open(remote_config_file, 'rb'))
+
+
+    if args.source_dir:
+        for path in config.get('template')['files']:
             file_path = os.path.join(args.source_dir, path)
             if not os.path.isfile(file_path):
                 print(f"Missing file in `--source-dir`: {file_path}",
                       file=sys.stderr)
                 exit(1)
             TMP_FILES[path] = file_path
-        else:
-            TMP_FILES[path] = github_download(config, path)
+    else:
+        for path in remote_config.get('template')['files']:
+            file_path = github_download(repo_url, path)
+
+            if not os.path.isfile(file_path):
+                print(f"Missing file at `{repo_url}`: {path}",
+                      file=sys.stderr)
+                exit(1)
+            TMP_FILES[path] = file_path
 
     if hasattr(args, 'func'):
         args.func(args)
