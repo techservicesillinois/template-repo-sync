@@ -163,7 +163,7 @@ def main():
 
     url = config.get('source').get('url')
 
-    if not config.get('template').get('files'):
+    if not config.get('template') or not config.get('template').get('files'):
         remote_config_file = remote_download(url, '.borg.toml')
         remote_config = tomllib.load(open(remote_config_file, 'rb'))
 
