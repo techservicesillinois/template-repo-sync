@@ -33,9 +33,9 @@ TMPDIR = tempfile.TemporaryDirectory(prefix='soar.template')
 TMP_FILES = {}
 
 
-def github_download(repo_url, path):
+def github_download(url, path):
     '''Download files from splunk-soar-template repo to tmpdir. '''
-    response = requests.get(urljoin(repo_url, path))
+    response = requests.get(urljoin(url, path))
 
     if response.status_code == 200:
         filename = join(TMPDIR.name, path)
@@ -165,10 +165,10 @@ def main():
         target = splitext(basename(args.make_target.name))[0]
         print(f"{target}: {' '.join(FILES)}", file=args.make_target)
 
-    repo_url = config.get('template').get('repo_url')
+    url = config.get('template').get('url')
 
     if not config.get('template').get('files'):
-        remote_config_file = github_download(repo_url, '.borg.toml')
+        remote_config_file = github_download(url, '.borg.toml')
         remote_config = tomllib.load(open(remote_config_file, 'rb'))
 
 
@@ -182,10 +182,10 @@ def main():
             TMP_FILES[path] = file_path
     else:
         for path in remote_config.get('template')['files']:
-            file_path = github_download(repo_url, path)
+            file_path = github_download(url, path)
 
             if not os.path.isfile(file_path):
-                print(f"Missing file at `{repo_url}`: {path}",
+                print(f"Missing file at `{url}`: {path}",
                       file=sys.stderr)
                 exit(1)
             TMP_FILES[path] = file_path

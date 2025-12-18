@@ -1,8 +1,8 @@
 [template]
-# repo_url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-repository/refs/heads/main/'
+# url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-repository/refs/heads/main/'
 
 # For testing: 
-repo_url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-repository/refs/heads/feature/sync/'
+url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-repository/refs/heads/feature/sync/'
 
 # TODO: Switch to the `main` repo_url above when #22 is merged.
 # https://github.com/techservicesillinois/secdev-template-repository/pull/22
