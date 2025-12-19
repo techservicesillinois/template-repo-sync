@@ -9,7 +9,7 @@ url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-re
 
 [override_template]
 # TODO: This is not implemented. This should be implemented or removed from this config.
-skip_files = [
+files = [
     ".github/workflows/deploy.yml",
     "Makefile",
 ]
