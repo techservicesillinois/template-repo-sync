@@ -1,3 +1,4 @@
 [source]
-# url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-repository/refs/heads/main/'
-url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-repository/refs/heads/feature/sync/'  # From https://github.com/techservicesillinois/secdev-template-repository/pull/22
+# url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-repository/refs/heads/feature/sync/'  # From https://github.com/techservicesillinois/secdev-template-repository/pull/22
+# url = 'https://github.com/techservicesillinois/secdev-template-python/blob/main/'
+url = 'https://github.com/techservicesillinois/secdev-template-python/refs/heads/doc/python'  # Open Pull Request

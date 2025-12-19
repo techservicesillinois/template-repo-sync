@@ -8,6 +8,26 @@ the local directory to.
 
 See `.borg.toml` in this directory for an example.
 
+URL should point to a web directory containing a `.borg.template.toml` file and all expected files specified in that file.
+
+An expected use case is using `raw.githubusercontent` URLs for public GitHub repositories.
+
+```
+[source]
+url = 'https://github.com/techservicesillinois/secdev-template-python/blob/main/'
+```
+
+Other GitHub branches can also be used for comparison, using a `refs/heads` URL:
+
+```
+[source]
+# Use an un-merged `doc/python` branch:
+url = 'https://github.com/techservicesillinois/secdev-template-python/refs/heads/doc/python'  # Open Pull Request
+```
+
+> Note: Our typical use case is public templates. But a private repository can be used, by first cloning it, and then calling `borg` with `--source-dir`.
+
+
 ### Template configuration 
 
 The remote `url` should contain a file named `.borg.template.toml`.
