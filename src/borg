@@ -13,6 +13,7 @@ example:
 import argparse
 import filecmp
 import os
+import logging
 import shutil
 import sys
 import tempfile
@@ -28,9 +29,12 @@ TMPDIR = tempfile.TemporaryDirectory(prefix='template-repo-sync')
 
 TMP_FILES = {}
 
+logger = logging.getLogger(__name__)
 
 def remote_download(url, path):
     '''Download files from remote url to tmpdir. '''
+
+    logger.debug(f"Fetching remote file {url}{path}")
     response = requests.get(urljoin(url, path))
 
     if response.status_code == 200:
@@ -41,10 +45,9 @@ def remote_download(url, path):
         with open(filename, 'wb') as f:
             f.write(response.content)
     else:
-        raise Exception(
-            f"Failed to download {path}. "
-            f"Status code: {response.status_code}"
-        )
+        print(f"Expected remote file is missing: {path}. ( {url}{path} )")
+        print(f"HTTP Status code: {response.status_code}")
+        exit(1)
 
     return filename
 
@@ -122,6 +125,11 @@ def init_parser():
         type=argparse.FileType('rb'),
         help="Open TOML config file")
     parser.add_argument(
+        "-d",
+        "--debug",
+        action=argparse.BooleanOptionalAction,
+        help="Print verbose debug output")
+    parser.add_argument(
             "-m",
             "--make-target",
             metavar="TARGET",
@@ -154,6 +162,11 @@ def main():
     parser = init_parser()
     args = parser.parse_args()
 
+    if(args.debug):
+        logging.getLogger(__name__).addHandler(logging.StreamHandler(sys.stdout))
+        logging.getLogger(__name__).setLevel(logging.DEBUG)
+        logger.debug(f"Called with --debug. Printing verbose output.")
+
     if '.git' not in os.listdir(os.curdir):
         print("borg must run from repository root.")
         exit(1)
@@ -166,6 +179,11 @@ def main():
         print(f"{target}: {' '.join(FILES)}", file=args.make_target)
 
     url = config.get('source').get('url')
+
+    if(not url.endswith('/')):
+       print(f"Remote URL must end in `/`: {url}. Please correct `url` in `.borg.toml`.")
+       exit(1)
+
 
     if not config.get('template') or not config.get('template').get('files'):
         if args.source_dir:
