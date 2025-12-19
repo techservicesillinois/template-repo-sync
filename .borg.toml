@@ -7,3 +7,9 @@ url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-re
 # TODO: Switch to the `main` repo_url above when #22 is merged.
 # https://github.com/techservicesillinois/secdev-template-repository/pull/22
 
+[override_template]
+# TODO: This is not implemented. This should be implemented or removed from this config.
+skip_files = [
+    ".github/workflows/deploy.yml",
+    "Makefile",
+]
