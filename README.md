@@ -31,7 +31,6 @@ files = [
 ]
 ```
 
-
 ## Data Sources
 
 |Data Store|Data Type|Sensitivity|Notes|
@@ -40,4 +39,5 @@ files = [
 
 ## Endpoint Connections
 
-None - Changes made by this tool should be managed through a separate dedicated tool, such as `git`.
+No endpoints. The outputs of this this tool are managed through a separate dedicated tool, such as `git`.
+
