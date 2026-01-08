@@ -13,8 +13,10 @@ URL should point to a web directory containing a `.borg.template.toml` file and 
 An expected use case is using `raw.githubusercontent` URLs for public GitHub repositories.
 
 ```
+# TODO: Verify this URL once a .borg.toml file has been merged:
 [source]
-url = 'https://github.com/techservicesillinois/secdev-template-python/blob/main/'
+# url = 'https://github.com/techservicesillinois/secdev-template-python/blob/main/' ?
+url = 'https://github.com/techservicesillinois/secdev-template-python/refs/heads/main' ?
 ```
 
 Other GitHub branches can also be used for comparison, using a `refs/heads` URL:
@@ -22,7 +24,7 @@ Other GitHub branches can also be used for comparison, using a `refs/heads` URL:
 ```
 [source]
 # Use an un-merged `doc/python` branch:
-url = 'https://github.com/techservicesillinois/secdev-template-python/refs/heads/doc/python'  # Open Pull Request
+url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-python/refs/heads/doc/python/'  # Open Pull Request
 ```
 
 > Note: Our typical use case is public templates. But a private repository can be used, by first cloning it, and then calling `borg` with `--source-dir`.
