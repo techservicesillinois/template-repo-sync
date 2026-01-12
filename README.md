@@ -12,22 +12,27 @@ URL should point to a web directory containing a `.borg.template.toml` file and 
 
 An expected use case is using `raw.githubusercontent` URLs for public GitHub repositories.
 
-```
-# TODO: Verify this URL once a .borg.toml file has been merged:
-[source]
-# url = 'https://github.com/techservicesillinois/secdev-template-python/blob/main/' ?
-url = 'https://github.com/techservicesillinois/secdev-template-python/refs/heads/main' ?
+A good way to find this `url` is to navigate to raw file view of `.borg.template.toml`.
+
+For example, on GitHub, the raw version of `.borg.template.toml` is at `https://raw.githubusercontent.com/techservicesillinois/secdev-template-repository/refs/heads/main/.borg.template.toml`
 ```
 
-Other GitHub branches can also be used for comparison, using a `refs/heads` URL:
+And so the `.borg.toml` file should contain:
 
 ```
 [source]
-# Use an un-merged `doc/python` branch:
-url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-python/refs/heads/doc/python/'  # Open Pull Request
+url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-repository/refs/heads/main/'
 ```
 
-> Note: Our typical use case is public templates. But a private repository can be used, by first cloning it, and then calling `borg` with `--source-dir`.
+It is also possible to use other GitHub branches for comparison, using a `refs/heads` URL:
+
+```
+[source]
+# To compare to an un-merged `doc/python` branch:
+url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-python/refs/heads/doc/python/'
+```
+
+> Note: Our typical use case is public templates. But a private repository can be used, by first cloning the private repository, and then calling `borg` with `--source-dir` pointed to the local folder of the clone.
 
 
 ### Template configuration 
