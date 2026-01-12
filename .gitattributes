@@ -6,7 +6,5 @@ CODE_OF_CONDUCT.md linguist-generated
 Makefile linguist-generated
 SECURITY.md linguist-generated
 mypy.ini linguist-generated
-pyproject.toml linguist-generated
-soar_template linguist-generated
 tests/test_python_version.py linguist-generated
 requirements*.txt linguist-generated
