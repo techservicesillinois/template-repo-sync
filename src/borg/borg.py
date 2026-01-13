@@ -3,8 +3,8 @@ description:
   Compare and update repo to match template.
 
 example:
-    template compare
-    template update
+    borg compare
+    borg update
 """
 
 import argparse
@@ -22,7 +22,7 @@ from urllib.parse import urljoin
 
 import requests
 
-TMPDIR = tempfile.TemporaryDirectory(prefix='template-repo-sync')
+TMPDIR = tempfile.TemporaryDirectory(prefix='borg')
 
 TMP_FILES = {}
 
