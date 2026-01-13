@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "borg"
+dynamic = ["version"]
+dependencies = [
+       "requests",
+]
+description = "Command line tool to compare and synchronize select files against a template repository."
+authors = [
+  {name = "Edward Delaport", email = "delaport@illinois.edu"},
+  {name = "Michele Pitcel", email = "mpitcel2@illinois.edu"},
+  {name = "David D. Riddle", email = "ddriddle@illinois.edu"},
+  {name = "Zach Carrington", email = "zdc@illinois.edu"},
+  {name = "Tyler Turner", email = "tzturner@illinois.edu"},
+]
+readme = "docs/readme.rst"
+license = {text = "NCSA License"}
+keywords = [ "template", "sync" ]
+classifiers = [
+    'Development Status :: 5 - Alpha',
+    'Environment :: Console',
+    'Intended Audience :: Developers',
+    'Intended Audience :: System Administrators',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.14',
+]
+requires-python = ">=3.10"
+
+[project.urls]
+Homepage = "https://github.com/techservicesillinois/template-repo-sync"
+"Bug Reports" = "https://github.com/techservicesillinois/template-repo-sync/issues"
+Source = "https://github.com/techservicesillinois/template-repo-sync"
+Changelog = "https://github.com/techservicesillinois/template-repo-sync/blob/master/CHANGELOG.md"
+
+[project.scripts]
+borg = "borg.borg:main"
+
+[tool.setuptools_scm]
+version_file = "src/borg/_version.py"
+local_scheme = "dirty-tag"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["borg*"]

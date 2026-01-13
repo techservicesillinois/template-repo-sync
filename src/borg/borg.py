@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 description:
   Compare and update repo to match template.
