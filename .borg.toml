@@ -1,3 +1,2 @@
 [source]
-url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-python/refs/heads/doc/python/'  # Open Pull Request
-# url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-python/refs/heads/main/'
+url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-python/refs/heads/main/'
