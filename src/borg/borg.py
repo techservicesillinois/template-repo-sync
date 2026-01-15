@@ -81,13 +81,13 @@ def update_repo(args):
     sys.exit(0)
 
 
-def generate(args, template_files):
+def generate(args):
     msg = "# Ignore files managed by borg in Github PR reviews\n"
     with open(args.FILE, "w") as file:
         if args.FILE == '.gitattributes':
             file.write(msg)
-            if len(template_files) > 0:
-                file.write(' linguist-generated\n'.join(template_files))
+            if len(args.template_files) > 0:
+                file.write(' linguist-generated\n'.join(args.template_files))
                 file.write(' linguist-generated\n')
 
 
@@ -201,9 +201,10 @@ def main():
         TMP_FILES[path] = file_path
 
 
+    args.template_files = template_config.get('template')['files']
 
     if hasattr(args, 'func'):
-        args.func(args, template_config.get('template')['files'])
+        args.func(args)
     else:
         parser.print_help(sys.stderr)
         sys.exit(1)
