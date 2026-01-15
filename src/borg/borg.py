@@ -83,11 +83,12 @@ def update_repo(args):
 
 def generate(args):
     msg = "# Ignore files managed by borg in Github PR reviews\n"
+    files = args.gitattribute_files
     with open(args.FILE, "w") as file:
         if args.FILE == '.gitattributes':
             file.write(msg)
-            if len(args.template_files) > 0:
-                file.write(' linguist-generated\n'.join(args.template_files))
+            if len(files) > 0:
+                file.write(' linguist-generated\n'.join(files))
                 file.write(' linguist-generated\n')
 
 
@@ -190,7 +191,6 @@ def main():
 
         template_config = tomllib.load(open(template_config_file, 'rb'))
 
-
     for path in template_config.get('template')['files']:
         if args.source_dir:
             file_path = os.path.join(args.source_dir, path)
@@ -201,7 +201,15 @@ def main():
         TMP_FILES[path] = file_path
 
 
-    args.template_files = template_config.get('template')['files']
+    args.gitattribute_files = []
+    config_generate = template_config.get('generate')
+    if config_generate:
+        config_gitattr = config_generate.get('gitattributes')
+        if config_gitattr:
+            args.gitattribute_files += config_gitattr['files']
+
+            if config_gitattr['include_template_files']:
+                args.gitattribute_files += template_config.get('template')['files']
 
     if hasattr(args, 'func'):
         args.func(args)
