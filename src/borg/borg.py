@@ -203,13 +203,13 @@ def main():
 
     args.gitattribute_files = []
     config_generate = template_config.get('generate')
-    if config_generate:
-        config_gitattr = config_generate.get('gitattributes')
-        if config_gitattr:
-            args.gitattribute_files += config_gitattr['files']
+    config_gitattr = config_generate.get('gitattributes') if config_generate else None
 
-            if config_gitattr['include_template_files']:
-                args.gitattribute_files += template_config.get('template')['files']
+    if config_gitattr:
+        args.gitattribute_files += config_gitattr['files']
+
+        if config_gitattr['include_template_files']:
+            args.gitattribute_files += template_config.get('template')['files']
 
     if hasattr(args, 'func'):
         args.func(args)
