@@ -1,3 +1,53 @@
+## Commands
+
+### Generate
+
+`borg` can generate content for `.gitattributes`, based on the `files` section of the configured `.borg.template.toml`. The generated [gitattributes file][gita] indicates to GitHub that certain files are machine-generated. This causes GitHub to hide the file `diff` during a pull request.
+
+You may want to add additional contents after regenerating `.gitattributes`,
+as in the `Makefile` example below.
+
+[gita]: https://git-scm.com/docs/gitattributes) 
+
+
+```sh
+borg generate .gitattributes
+```
+
+Given this `.borg.template.toml`:
+
+```toml
+[template]
+files = [
+    ".gitattributes",
+    ".github/workflows/pr_reminder.yml",
+    ".github/workflows/cleanup.yml",
+    "CODE_OF_CONDUCT.md",
+    "SECURITY.md",
+]
+```
+
+will generate this `.gitattributes` file:
+
+```sh
+
+# Ignore files managed by borg in Github PR reviews
+.gitattributes linguist-generated
+.gitignore linguist-generated
+.github/workflows/pr_reminder.yml linguist-generated
+.github/workflows/cleanup.yml linguist-generated
+CODE_OF_CONDUCT.md linguist-generated
+SECURITY.md linguist-generated
+```
+
+And here is a `Makefile` example, where we append additional data to the `.gitattributes` file after generating it with `borg generate`.
+
+```makefile
+.gitattributes: .borg.toml
+	borg generate $^
+	echo 'requirements*.txt linguist-generated' >> $^  # Add additional files to .gitattributes
+```
+
 ## Configuration
 
 ### Local configuration
