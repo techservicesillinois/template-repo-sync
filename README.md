@@ -1,5 +1,22 @@
 ## Commands
 
+### Compare and Update
+
+`borg` can compare or update a local folder to match a template repository.
+
+An expected use case is keeping a code repository in sync with a [GitHub Template Repository][gittemp].
+Any web URL containing example files may be used.
+
+`.borg.toml` tells `borg` where to find the template repository. The template repository must include at least `.borg.template.toml`, which specifies which of the other files available in the template repository should be kept in sync by `borg`. See `Configuration` for more details on configurating `borg`.
+
+`borg compare` may be used during a CI/CD pipeline to issue a warning if files differ from the template repository. The command `borg compare` will have no output if all specified files match the template repository. If any files differ, they will be listed in the output of `borg compare`, and `borg` will exit with a non-zero exit code.
+
+`borg update` updates all appropriate files in the local folder to match the template repository, per the configuration in `.borg.template.toml`. `borg update` can be used to resolve CI/CD pipeline warnings issued by `borg compare`. 
+
+Using the these commands helps ensure that best practice updates made to a template repository consistently reach project repositories.
+
+[gittemp]: https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository
+
 ### Generate
 
 `borg` can generate content for `.gitattributes`, based on the `files` section of the configured `.borg.template.toml`. The generated [gitattributes file][gita] indicates to GitHub that certain files are machine-generated. This causes GitHub to hide the file `diff` during a pull request.
@@ -68,7 +85,7 @@ the local directory to.
 
 See `.borg.toml` in this directory for an example.
 
-URL should point to a web directory containing a `.borg.template.toml` file and all expected files specified in that file.
+`url` should point to a web directory containing a `.borg.template.toml` file and all expected files specified in that file.
 
 An expected use case is using `raw.githubusercontent` URLs for public GitHub repositories.
 
@@ -94,6 +111,7 @@ url = 'https://raw.githubusercontent.com/techservicesillinois/secdev-template-py
 
 > Note: Our typical use case is public templates. But a private repository can be used, by first cloning the private repository, and then calling `borg` with `--source-dir` pointed to the local folder of the clone.
 
+When using `--source-dir`, any `.borg.toml` file is ignored. Template configuration is loaded as usual from the `.borg.template.toml` file in the template repository directory specified by `--source-dir`.
 
 ### Template configuration 
 
@@ -122,7 +140,7 @@ files = [
 
 |Data Store|Data Type|Sensitivity|Notes|
 |----------|---------|-----------|-----|
-| Remote template URL | Text | Public | |
+| A remote template URL | Text | Public | This URL is specified in `.borg.toml` |
 
 ## Endpoint Connections
 
