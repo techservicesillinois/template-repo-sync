@@ -18,21 +18,31 @@ Given this `.borg.template.toml`:
 
 ```toml
 [template]
+# Keep these files in sync across Python repos
 files = [
-    ".gitattributes",
+    ".gitignore",
     ".github/workflows/pr_reminder.yml",
     ".github/workflows/cleanup.yml",
     "CODE_OF_CONDUCT.md",
     "SECURITY.md",
 ]
+
+[generate.gitattributes]
+files = [
+    # All machine generated files
+    ".gitattributes",
+    "requiements*.txt",
+]
+# Include all template files above
+include_template_files = true
 ```
 
 will generate this `.gitattributes` file:
 
 ```sh
-
 # Ignore files managed by borg in Github PR reviews
 .gitattributes linguist-generated
+requiements*.txt linguist-generated
 .gitignore linguist-generated
 .github/workflows/pr_reminder.yml linguist-generated
 .github/workflows/cleanup.yml linguist-generated
